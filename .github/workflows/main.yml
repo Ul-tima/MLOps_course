@@ -21,7 +21,7 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            ml
+            ${{ secrets.DOCKER_HUB_USER }}/${{ env.IMAGE_ML_APP }}
           # generate Docker tags based on the following events/attributes
           tags: |
             type=schedule
@@ -61,7 +61,7 @@ jobs:
         with:
           # list of Docker images to use as base name for tags
           images: |
-            ml
+            ${{ secrets.DOCKER_HUB_USER }}/${{ env.IMAGE_WEB_APP }}
           # generate Docker tags based on the following events/attributes
           tags: |
             type=schedule
@@ -84,5 +84,5 @@ jobs:
           context: web/
           file: web/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USER }}/${{ env.IMAGE_WEB_APP }}::latest, ${{ secrets.DOCKER_HUB_USER }}/${{ env.IMAGE_WEB_APP }}::${{ steps.meta.outputs.tags }}
+          tags: ${{ secrets.DOCKER_HUB_USER }}/${{ env.IMAGE_WEB_APP }}:latest, ${{ secrets.DOCKER_HUB_USER }}/${{ env.IMAGE_WEB_APP }}:${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
