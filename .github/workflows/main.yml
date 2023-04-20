@@ -5,7 +5,7 @@ on:
 
 env:
   IMAGE_ML_APP: ml
-  IMAGE_ML_WEB: web
+  IMAGE_WEB_APP: web
   
 jobs:
   build-and-push-ml:
