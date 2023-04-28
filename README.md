@@ -62,3 +62,15 @@ kubectl logs jobs/job-ml
 
 Run Kubernetes CLI
 k9s -A
+
+
+***WEEK 2***
+
+
+**MINIO**
+
+**Docker**
+
+docker-compose -f ./minio/docker-compose.yml up -d
+
+docker-compose ps
