@@ -115,3 +115,13 @@ git add .dvc/config
 git commit -m "Configure remote storage"
 git push
 
+
+
+**Label studio**
+
+Install locally with Docker
+Run Label Studio in a Docker container and access it at http://localhost:8080.
+
+docker pull heartexlabs/label-studio:latest
+
+docker run -it -p 8080:8080 -v $(pwd)/mydata:/label-studio/data heartexlabs/label-studio:latest
