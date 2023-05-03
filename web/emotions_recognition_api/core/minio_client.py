@@ -1,5 +1,6 @@
-from pathlib import Path
+from os import PathLike
 from minio import Minio
+from minio.error import S3Error
 
 ACCESS_KEY = "minio_user"
 SECRET_KEY = "minio_password"
@@ -14,15 +15,14 @@ class MinioClient:
             self.bucket_name = bucket_name
             if not client.bucket_exists(self.bucket_name):
                 self.client.make_bucket(self.bucket_name)
-        except Exception as ex:
-            print("Not able to connect minio / {}".format(ex))
+        except S3Error as ex:
+            print(ex.code, ex.message)
 
-    def upload_data(self, object_name: str, data, length):
+    def upload_data(self, object_name: str, data, length) -> None:
         self.client.put_object(self.bucket_name, object_name, data, length)
 
-    def download_file(self, object_name: str, file_path: Path):
+    def download_file(self, object_name: str, file_path: str | PathLike) -> None:
         self.client.fget_object(self.bucket_name, object_name, str(file_path))
 
-    def delete_file(self, object_name):
+    def delete_file(self, object_name) -> None:
         self.client.remove_object(self.bucket_name, object_name)
-
