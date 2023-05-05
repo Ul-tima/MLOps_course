@@ -62,3 +62,66 @@ kubectl logs jobs/job-ml
 
 Run Kubernetes CLI
 k9s -A
+
+
+***WEEK 2***
+
+
+**MINIO**
+
+**Docker**
+
+docker-compose -f ./minio/docker-compose.yml up -d
+
+docker-compose ps
+
+Set alias for minio
+
+mc alias set ALIAS HOSTNAME ACCESS_KEY SECRET_KEY
+mc alias set s3 http://0.0.0.0:9000 minio_user minio_password
+
+
+**DVC**
+
+
+Init DVC
+
+dvc init --subdir
+
+
+Create remote directory
+
+mc mb s3/dataset
+
+dvc remote add -d minio s3://dataset 
+
+dvc remote modify minio endpointurl http://0.0.0.0:9000
+
+dvc remote modify minio access_key_id minio_user
+
+dvc remote modify minio secret_access_key minio_password
+
+
+Add folder to dvc
+
+dvc add ./dataset/crema
+
+git add dataset/.gitignore dataset/crema.dvc
+
+
+Save code to git
+
+git add .dvc/config
+git commit -m "Configure remote storage"
+git push
+
+
+
+**Label studio**
+
+Install locally with Docker
+Run Label Studio in a Docker container and access it at http://localhost:8080.
+
+docker pull heartexlabs/label-studio:latest
+
+docker run -it -p 8080:8080 -v $(pwd)/mydata:/label-studio/data heartexlabs/label-studio:latest
