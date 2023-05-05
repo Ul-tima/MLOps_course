@@ -1,0 +1,5 @@
+outs:
+- md5: 36df4db4f45d7d4d3308d2db97a2c0b2.dir
+  size: 605899936
+  nfiles: 7442
+  path: crema
