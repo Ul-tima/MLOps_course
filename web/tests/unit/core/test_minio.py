@@ -1,17 +1,18 @@
 import io
-import pytest
 from unittest import mock
+
+import pytest
 from core.minio_client import MinioClient
 
 
 @pytest.fixture()
 def bucket_name():
-    return 'test-bucket'
+    return "test-bucket"
 
 
 @pytest.fixture()
 def object_name():
-    return 'test'
+    return "test"
 
 
 @pytest.fixture()
@@ -37,10 +38,10 @@ def minio(bucket_name: str):
 def test_upload_data(bucket_name: str, stream: io.BytesIO, length: int, minio: MinioClient):
     # Act
     with mock.patch.object(minio.client, "put_object") as patched:
-        minio.upload_data('test', stream, length)
+        minio.upload_data("test", stream, length)
 
     # Assert
-    patched.assert_called_once_with(bucket_name, 'test', stream, length)
+    patched.assert_called_once_with(bucket_name, "test", stream, length)
 
 
 def test_download_file(bucket_name: str, object_name: str, file_path: str, minio: MinioClient):

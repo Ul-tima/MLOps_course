@@ -6,7 +6,7 @@ Web:
 
 docker build --tag web:latest ./web
 
-docker run -it --rm -p 8000:80 web:latest 
+docker run -it --rm -p 8000:80 web:latest
 
 
 ML:
@@ -93,7 +93,7 @@ Create remote directory
 
 mc mb s3/dataset
 
-dvc remote add -d minio s3://dataset 
+dvc remote add -d minio s3://dataset
 
 dvc remote modify minio endpointurl http://0.0.0.0:9000
 

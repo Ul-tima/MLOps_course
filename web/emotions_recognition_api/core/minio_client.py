@@ -1,6 +1,8 @@
 from os import PathLike
-from minio import Minio
+
 from minio.error import S3Error
+
+from minio import Minio
 
 ACCESS_KEY = "minio_user"
 SECRET_KEY = "minio_password"
@@ -8,7 +10,13 @@ ENDPOINT = "0.0.0.0:9000"
 
 
 class MinioClient:
-    def __init__(self, bucket_name: str, endpoint=ENDPOINT, access_key=ACCESS_KEY, secret_key=SECRET_KEY) -> None:
+    def __init__(
+        self,
+        bucket_name: str,
+        endpoint=ENDPOINT,
+        access_key=ACCESS_KEY,
+        secret_key=SECRET_KEY,
+    ) -> None:
         try:
             client = Minio(endpoint, access_key, secret_key, secure=False)
             self.client = client
