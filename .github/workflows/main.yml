@@ -1,13 +1,28 @@
 name: ci
 
-on: 
+on:
    pull_request:
 
 env:
   IMAGE_ML_APP: ml
   IMAGE_WEB_APP: web
-  
+
 jobs:
+  check-code-style:
+    runs-on: ubuntu-latest
+    name: Check Code Style
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Setup Python 3.10
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Run Pre-Commit Checks
+      uses: pre-commit/action@v3.0.0
+
   build-and-push-ml:
     runs-on: ubuntu-latest
     steps:
@@ -46,7 +61,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          
+
   build-and-push-web:
     runs-on: ubuntu-latest
     steps:
