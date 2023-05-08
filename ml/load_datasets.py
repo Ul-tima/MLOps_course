@@ -72,10 +72,14 @@ def read_ravdess_data(path_dir: str) -> pd.DataFrame:
 
 def get_dataset(ravdess: bool, crema: bool, savee: bool) -> pd.DataFrame:
     dataset = pd.DataFrame({"Path": pd.Series(dtype="str"), "Emotion": pd.Series(dtype="str")})
+    par_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
     if ravdess:
-        dataset = pd.concat([dataset, read_ravdess_data("../dataset/ravdess")], ignore_index=True)
+        path = os.path.join(par_dir, "dataset", "ravdess")
+        dataset = pd.concat([dataset, read_ravdess_data(path)], ignore_index=True)
     if crema:
-        dataset = pd.concat([dataset, read_crema_data("../dataset/crema")], ignore_index=True)
+        path = os.path.join(par_dir, "dataset", "crema")
+        dataset = pd.concat([dataset, read_crema_data(path)], ignore_index=True)
     if savee:
-        dataset = pd.concat([dataset, read_savee_data("../dataset/savee")], ignore_index=True)
+        path = os.path.join(par_dir, "dataset", "savee")
+        dataset = pd.concat([dataset, read_savee_data(path)], ignore_index=True)
     return dataset
