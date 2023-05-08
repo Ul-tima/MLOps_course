@@ -1,3 +1,6 @@
+from typing import List
+from typing import Tuple
+
 import librosa
 import numpy as np
 import pandas as pd
@@ -15,7 +18,7 @@ from ml.load_datasets import get_dataset
 from ml.model import create_model
 
 
-def scale_data(train, valid, test):
+def scale_data(train: np.ndarray, valid: np.ndarray, test: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     # Get mean and standard deviation from the training set
     tr_mean = np.mean(train, axis=0)
     tr_std = np.std(train, axis=0)
@@ -26,7 +29,7 @@ def scale_data(train, valid, test):
     return train, valid, test
 
 
-def train():
+def train() -> None:
     wandb.init(
         project="ser",
         config={
@@ -75,7 +78,7 @@ def train():
     wandb.finish()
 
 
-def prepare_training_data(df: pd.DataFrame, sr: float = 16000):
+def prepare_training_data(df: pd.DataFrame, sr: float = 16000) -> Tuple[List[np.ndarray], np.ndarray]:
     X = []
     Y = []
     for i in range(len(df)):

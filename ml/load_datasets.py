@@ -4,7 +4,7 @@ import re
 import pandas as pd
 
 
-def read_crema_data(path_dir="../dataset/crema"):
+def read_crema_data(path_dir: str) -> pd.DataFrame:
     emotion_df = []
 
     files = os.listdir(path_dir)
@@ -21,7 +21,7 @@ def read_crema_data(path_dir="../dataset/crema"):
     return crema_df
 
 
-def read_savee_data(path_dir="../dataset/savee"):
+def read_savee_data(path_dir: str) -> pd.DataFrame:
     root = os.listdir(path_dir)
 
     emotion_df = []
@@ -45,7 +45,7 @@ def read_savee_data(path_dir="../dataset/savee"):
     return savee_df
 
 
-def read_ravdess_data(path_dir="../dataset/ravdess"):
+def read_ravdess_data(path_dir: str) -> pd.DataFrame:
     root = os.listdir(path_dir)
 
     emotion_df = []
@@ -70,7 +70,7 @@ def read_ravdess_data(path_dir="../dataset/ravdess"):
     return ravdess_df
 
 
-def get_dataset(ravdess: bool, crema: bool, savee: bool):
+def get_dataset(ravdess: bool, crema: bool, savee: bool) -> pd.DataFrame:
     dataset = pd.DataFrame({"Path": pd.Series(dtype="str"), "Emotion": pd.Series(dtype="str")})
     if ravdess:
         dataset = pd.concat([dataset, read_ravdess_data("../dataset/ravdess")], ignore_index=True)

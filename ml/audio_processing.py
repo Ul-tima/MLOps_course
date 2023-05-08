@@ -12,7 +12,7 @@ def stretch(audio: np.array, rate: float = 0.8) -> np.array:
     return librosa.effects.time_stretch(y=audio, rate=rate)
 
 
-def pitch(audio: np.array, sampling_rate: float = 16000, n_steps: float = 2):
+def pitch(audio: np.array, sampling_rate: float = 16000, n_steps: float = 2) -> np.ndarray:
     return librosa.effects.pitch_shift(y=audio, sr=sampling_rate, n_steps=n_steps)
 
 
