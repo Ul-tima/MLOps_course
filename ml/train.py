@@ -1,15 +1,15 @@
 import librosa
 import numpy as np
 import pandas as pd
-import wandb
 from keras.utils import np_utils
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
 from tensorflow import keras
+from wandb.integration.keras import WandbCallback
 from wandb.integration.keras import WandbMetricsLogger
-from wandb.integration.keras import WandbModelCheckpoint
 
+import wandb
 from ml import audio_processing
 from ml.load_datasets import get_dataset
 from ml.model import create_model
@@ -57,7 +57,7 @@ def train():
     model = create_model(x_train.shape[1:])
     model.compile(loss=config.loss, optimizer=config.optimizer, metrics=config.metric)
 
-    callbacks = [keras.callbacks.EarlyStopping(patience=5), WandbMetricsLogger()]
+    callbacks = [keras.callbacks.EarlyStopping(patience=5), WandbMetricsLogger(), WandbCallback()]
 
     model.fit(
         x_train,
