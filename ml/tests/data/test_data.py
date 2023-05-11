@@ -1,30 +1,27 @@
-import os
+import pathlib
 
 import librosa
 import pytest
 
-dir_path = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-DATA_PATH = os.path.join(dir_path, "dataset", "sample")
+current_dir = pathlib.Path(__file__).parent
+tests_dir = current_dir.parent
+package_dir = tests_dir.parent
+project_root_dir = package_dir.parent
+samples_dir = project_root_dir / "dataset" / "sample"
+audio_files = [sample for sample in samples_dir.iterdir()]
 
 
-@pytest.mark.parametrize("audio_file", [os.path.join(DATA_PATH, file) for file in os.listdir(DATA_PATH)])
-def test_audio_file_format(audio_file):
-    _, file_ext = os.path.splitext(audio_file)
-    assert file_ext == ".wav"
-
-
-@pytest.mark.parametrize("audio_file", [os.path.join(DATA_PATH, file) for file in os.listdir(DATA_PATH)])
+@pytest.mark.parametrize("audio_file", audio_files)
 class TestAudioData:
-    def test_audio_file_format(self, audio_file):
-        _, file_ext = os.path.splitext(audio_file)
-        assert file_ext == ".wav"
+    def test_audio_file_format(self, audio_file: pathlib.Path):
+        assert audio_file.suffix == ".wav"
 
-    def test_audio_file_valid(self, audio_file):
+    def test_audio_file_valid(self, audio_file: pathlib.Path):
         # Test that the audio file can be loaded by librosa without errors
         y, sr = librosa.load(audio_file, sr=None)
         assert y is not None
 
-    def test_audio_duration(self, audio_file):
+    def test_audio_duration(self, audio_file: pathlib.Path):
         # Check if the duration of the audio file is up to 5 sec
         y, sr = librosa.load(audio_file)
         duration = librosa.get_duration(y=y, sr=sr)
