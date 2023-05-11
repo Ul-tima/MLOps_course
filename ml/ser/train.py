@@ -4,6 +4,7 @@ from typing import Tuple
 import librosa
 import numpy as np
 import pandas as pd
+import wandb
 from keras.utils import np_utils
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
@@ -12,7 +13,6 @@ from tensorflow import keras
 from wandb.integration.keras import WandbCallback
 from wandb.integration.keras import WandbMetricsLogger
 
-import wandb
 from ml.ser import audio_processing
 from ml.ser.evaluation import plot_confusion_matrix
 from ml.ser.load_datasets import get_dataset
