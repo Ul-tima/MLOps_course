@@ -27,4 +27,4 @@ jobs:
 
       - name: Run pytest for data
         run: |
-          pytest ml/tests/test_data.py
+          pytest ml/tests/data
