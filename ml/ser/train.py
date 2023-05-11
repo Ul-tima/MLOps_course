@@ -13,10 +13,10 @@ from tensorflow import keras
 from wandb.integration.keras import WandbCallback
 from wandb.integration.keras import WandbMetricsLogger
 
-from ml import audio_processing
-from ml.evaluation import plot_confusion_matrix
-from ml.load_datasets import get_dataset
-from ml.model import create_model
+from ml.ser import audio_processing
+from ml.ser.evaluation import plot_confusion_matrix
+from ml.ser.load_datasets import get_dataset
+from ml.ser.model import create_model
 
 
 def scale_data(train: np.ndarray, valid: np.ndarray, test: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:

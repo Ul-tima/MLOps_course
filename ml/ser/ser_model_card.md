@@ -20,12 +20,12 @@ The model was trained on a dataset of speech samples labeled with the correspond
 The model is a convolutional neural network (CNN) for speech emotion recognition. It consists of two convolutional layers with max pooling and batch normalization, followed by three fully connected layers with dropout and a softmax output layer. The model is compiled with the Adam optimizer, categorical cross-entropy loss function, and accuracy as the evaluation metric.
 ## Model architecture
 
-![Model architecture](data/model.png)
+![Model architecture](ser/data/model.png)
 
 ## Classification Report
 
-![Classification Report](data/classification_report.png)
+![Classification Report](ser/data/classification_report.png)
 
 ## Confusion Matrix
 
-![Confusion Matrix](data/confusion_matrix.png)
+![Confusion Matrix](ser/data/confusion_matrix.png)
