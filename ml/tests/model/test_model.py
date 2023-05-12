@@ -13,10 +13,11 @@ def model():
 
 @pytest.fixture()
 def data():
-    x = np.random.randn(100, 30, 150, 1)
-    y = np.zeros((100, 7))
+    samples_count = 200
+    x = np.random.randn(samples_count, 30, 150, 1)
+    y = np.zeros((samples_count, 7))
 
-    for i in range(100):
+    for i in range(samples_count):
         row_sum = 0
         for j in range(7):
             if row_sum < 1:
