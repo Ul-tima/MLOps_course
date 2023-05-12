@@ -4,7 +4,7 @@ on:
   pull_request:
     paths:
       - "ml/ser/**"
-      - "ml/tests/model"
+      - "ml/tests/model/**"
 
 
 jobs:
