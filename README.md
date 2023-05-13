@@ -1,4 +1,4 @@
-# MLOps_course
+kubectl cluster-info# MLOps_course
 
 **Docker**
 
@@ -128,17 +128,21 @@ docker run -it -p 8080:8080 -v $(pwd)/mydata:/label-studio/data heartexlabs/labe
 
 
 
-***WEEK 3***
+***Week 4***
 
-**WANDB**
+**Deploy Kubeflow Pipelines**
 
-export PYTHONPATH=$(pwd)
+```
+export PIPELINE_VERSION="2.0.0-alpha.4"
+kubectl kustomize "github.com/kubeflow/pipelines/manifests/kustomize/cluster-scoped-resources?ref=$PIPELINE_VERSION" > kubeflow/res.yaml
+kubectl create -f kubeflow/res.yaml
+kubectl wait --for condition=established --timeout=60s crd/applications.app.k8s.io
+kubectl kustomize "github.com/kubeflow/pipelines/manifests/kustomize/env/dev?ref=$PIPELINE_VERSION" > kubeflow/pipelines.yaml
+kubectl create -f kubeflow/pipelines.yaml
+```
 
-wandb login
-
-
-Run hyperparameter tuning
-
-wandb sweep ml/sweep.yaml
-
-wandb agent SWEEP_ID
+Check
+```
+kubectl port-forward -n kubeflow svc/ml-pipeline-ui 8080:80
+kubectl port-forward --address=0.0.0.0 svc/minio-service 9000:9000 -n kubeflow
+```
