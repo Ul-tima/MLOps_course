@@ -5,6 +5,7 @@ on:
     paths:
       - "ml/ser/**"
       - "ml/tests/model/**"
+      - "ml/tests/code/**"
 
 
 jobs:
@@ -27,4 +28,8 @@ jobs:
 
       - name: Run model pytest
         run: |
-          pytest ml/tests/model
+          python -m pytest ml/tests/model
+
+      - name: Run pytest
+        run: |
+          python -m pytest ml/tests/code
