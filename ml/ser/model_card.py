@@ -4,8 +4,8 @@ from keras.utils import plot_model
 from sklearn.metrics import classification_report
 from sklearn.metrics import confusion_matrix
 
-from ml.evaluation import plot_classification_report
-from ml.evaluation import plot_confusion_matrix
+from ml.ser.evaluation import plot_classification_report
+from ml.ser.evaluation import plot_confusion_matrix
 
 
 class ModelCardGenerator:
@@ -82,11 +82,11 @@ if __name__ == "__main__":
     report = classification_report(
         np.argmax(y_test, axis=1), np.argmax(y_pred, axis=1), target_names=target_names, output_dict=True
     )
-    plot_classification_report(report, target_names, "data/classification_report.png")
+    plot_classification_report(report, target_names, "ser/data/classification_report.png")
     model_card.add_chart("Classification Report", "data/classification_report.png")
 
     matrix = confusion_matrix(y_test.argmax(axis=1), y_pred.argmax(axis=1))
-    plot_confusion_matrix(matrix, target_names, "data/confusion_matrix.png")
+    plot_confusion_matrix(matrix, target_names, "ser/data/confusion_matrix.png")
     model_card.add_chart("Confusion Matrix", "data/confusion_matrix.png")
 
     # Get the Markdown string for the model card
