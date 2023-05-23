@@ -125,3 +125,20 @@ Run Label Studio in a Docker container and access it at http://localhost:8080.
 docker pull heartexlabs/label-studio:latest
 
 docker run -it -p 8080:8080 -v $(pwd)/mydata:/label-studio/data heartexlabs/label-studio:latest
+
+
+
+***WEEK 3***
+
+**WANDB**
+
+export PYTHONPATH=$(pwd)
+
+wandb login
+
+
+Run hyperparameter tuning
+
+wandb sweep ml/sweep.yaml
+
+wandb agent SWEEP_ID

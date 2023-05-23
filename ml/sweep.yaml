@@ -1,0 +1,18 @@
+# sweep.yaml
+project: "ser"
+program: ml/train.py
+method: grid
+metric:
+ name: val_loss
+ goal: minimize
+parameters:
+ learning-rate:
+   values: [0.1, 0.01, 0.001]
+ filters:
+   values: [32, 64, 128]
+ optimizer:
+   values: [ "adam", "sgd" ]
+ hidden_layer_size:
+   values: [ 96, 128, 148 ]
+ epochs:
+   value: 10
