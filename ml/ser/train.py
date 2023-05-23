@@ -70,7 +70,16 @@ def train(use_saved_data: bool = False) -> None:
         np.save("data/y_test.npy", y_test)
 
     model = train_model(config, x_train, x_valid, y_train, y_valid)
-    model.save("ser_v1.h5")
+    model.save(f"data/model_{wandb.id}.h5")
+
+    model_art = wandb.Artifact(f"model_{wandb.id}", type="model")
+    model_art.add_file(f"data/model_{wandb.id}.h5")
+    wandb.log_artifact(model_art)
+
+    # Link the model to the Model Registry
+    wandb.link_artifact(model_art, "model-registry/My Registered Model")
+
+    wandb.finish()
 
     y_predict = model.predict(x_test)
     matrix = confusion_matrix(y_test.argmax(axis=1), y_predict.argmax(axis=1))
