@@ -16,6 +16,7 @@ from wandb.integration.keras import WandbMetricsLogger
 from ml.ser import audio_processing
 from ml.ser.evaluation import plot_confusion_matrix
 from ml.ser.load_datasets import get_dataset
+from ml.ser.load_datasets import load_saved_data
 from ml.ser.model import create_model
 
 
@@ -45,13 +46,7 @@ def train(use_saved_data: bool = False) -> None:
     config = wandb.config
 
     if use_saved_data:
-        x_train = np.load("data/x_train_ex.npy")
-        x_test = np.load("data/x_test_ex.npy")
-        x_valid = np.load("data/x_valid_ex.npy")
-
-        y_train = np.load("data/y_train.npy")
-        y_test = np.load("data/y_test.npy")
-        y_valid = np.load("data/y_valid.npy")
+        x_train, x_valid, x_test, y_train, y_valid, y_test = load_saved_data("data/")
     else:
         data = get_dataset(True, True, True)
         x, y = prepare_training_data(data)
