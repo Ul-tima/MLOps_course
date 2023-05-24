@@ -31,3 +31,22 @@ def create_model(input_shape: tuple[int, ...]) -> keras.Sequential:
     model.add(Dropout(0.5))
     model.add(Dense(units=7, activation="softmax"))
     return model
+
+
+from pathlib import Path
+
+import wandb
+
+
+def save_model_to_registry(model_name: str, model_path: Path):
+    with wandb.init() as _:
+        model_art = wandb.Artifact(model_name, type="model")
+        model_art.add_file(model_path)
+        wandb.log_artifact(model_art)
+        wandb.link_artifact(model_art, "model-registry/My Registered Model")
+
+
+def load_from_registry(model_name: str, model_path: Path):
+    with wandb.init() as run:
+        artifact = run.use_artifact(model_name, type="model")
+        artifact.download(root=model_path)

@@ -18,6 +18,7 @@ from ml.ser.evaluation import plot_confusion_matrix
 from ml.ser.load_datasets import get_dataset
 from ml.ser.load_datasets import load_saved_data
 from ml.ser.model import create_model
+from ml.ser.model import save_model_to_registry
 
 
 def scale_data(train: np.ndarray, valid: np.ndarray, test: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -63,16 +64,10 @@ def train(use_saved_data: bool = False) -> None:
         np.save("data/y_train.npy", y_train)
         np.save("data/y_valid.npy", y_valid)
         np.save("data/y_test.npy", y_test)
+    model_path = f"data/model_{wandb.id}.h5"
+    model = train_model(config, x_train, x_valid, y_train, y_valid, model_path)
 
-    model = train_model(config, x_train, x_valid, y_train, y_valid)
-    model.save(f"data/model_{wandb.id}.h5")
-
-    model_art = wandb.Artifact(f"model_{wandb.id}", type="model")
-    model_art.add_file(f"data/model_{wandb.id}.h5")
-    wandb.log_artifact(model_art)
-
-    # Link the model to the Model Registry
-    wandb.link_artifact(model_art, "model-registry/My Registered Model")
+    save_model_to_registry(f"model_{wandb.id}", model_path)
 
     wandb.finish()
 
@@ -93,7 +88,7 @@ def split_data(x, y):
     return x_train, x_valid, x_test, y_train, y_valid, y_test
 
 
-def train_model(config, x_train, x_valid, y_train, y_valid):
+def train_model(config, x_train, x_valid, y_train, y_valid, model_path):
     model = create_model(x_train.shape[1:])
     model.compile(loss=config.loss, optimizer=config.optimizer, metrics=config.metric)
     callbacks = [keras.callbacks.EarlyStopping(patience=5), WandbMetricsLogger(), WandbCallback()]
@@ -105,6 +100,7 @@ def train_model(config, x_train, x_valid, y_train, y_valid):
         batch_size=config.batch_size,
         callbacks=callbacks,
     )
+    model.save(model_path)
     return model
 
 
