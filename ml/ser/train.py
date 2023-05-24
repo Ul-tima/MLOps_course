@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import List
 from typing import Tuple
 
@@ -44,8 +45,6 @@ def train(use_saved_data: bool = False) -> None:
         },
     )
 
-    config = wandb.config
-
     if use_saved_data:
         x_train, x_valid, x_test, y_train, y_valid, y_test = load_saved_data("data/")
     else:
@@ -65,7 +64,7 @@ def train(use_saved_data: bool = False) -> None:
         np.save("data/y_valid.npy", y_valid)
         np.save("data/y_test.npy", y_test)
     model_path = f"data/model_{wandb.id}.h5"
-    model = train_model(config, x_train, x_valid, y_train, y_valid, model_path)
+    model = train_model(wandb.config, x_train, x_valid, y_train, y_valid, model_path)
 
     save_model_to_registry(f"model_{wandb.id}", model_path)
 
@@ -78,7 +77,10 @@ def train(use_saved_data: bool = False) -> None:
     wandb.finish()
 
 
-def split_data(x, y):
+def split_data(
+    x: np.ndarray, y: np.ndarray
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    # Create train, validation, and test sets
     # Create train, validation and test set
     x_train, x_test, y_train, y_test = train_test_split(
         np.array(x), np.array(y), train_size=0.8, shuffle=True, random_state=0
@@ -88,16 +90,18 @@ def split_data(x, y):
     return x_train, x_valid, x_test, y_train, y_valid, y_test
 
 
-def train_model(config, x_train, x_valid, y_train, y_valid, model_path):
+def train_model(
+    config: dict, x_train: np.ndarray, x_valid: np.ndarray, y_train: np.ndarray, y_valid: np.ndarray, model_path: Path
+) -> keras.Model:
     model = create_model(x_train.shape[1:])
-    model.compile(loss=config.loss, optimizer=config.optimizer, metrics=config.metric)
+    model.compile(loss=config["loss"], optimizer=config["optimizer"], metrics=config["metric"])
     callbacks = [keras.callbacks.EarlyStopping(patience=5), WandbMetricsLogger(), WandbCallback()]
     model.fit(
         x_train,
         y_train,
         validation_data=(x_valid, y_valid),
-        epochs=config.epochs,
-        batch_size=config.batch_size,
+        epochs=config["epochs"],
+        batch_size=config["batch_size"],
         callbacks=callbacks,
     )
     model.save(model_path)
