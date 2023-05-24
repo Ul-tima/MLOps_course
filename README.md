@@ -1,4 +1,4 @@
-kubectl cluster-info# MLOps_course
+# MLOps_course
 
 **Docker**
 
@@ -133,6 +133,8 @@ docker run -it -p 8080:8080 -v $(pwd)/mydata:/label-studio/data heartexlabs/labe
 **Deploy Kubeflow Pipelines**
 
 ```
+kind create cluster --name week4
+
 export PIPELINE_VERSION="2.0.0-alpha.4"
 kubectl kustomize "github.com/kubeflow/pipelines/manifests/kustomize/cluster-scoped-resources?ref=$PIPELINE_VERSION" > kubeflow/res.yaml
 kubectl create -f kubeflow/res.yaml
@@ -145,4 +147,23 @@ Check
 ```
 kubectl port-forward -n kubeflow svc/ml-pipeline-ui 8080:80
 kubectl port-forward --address=0.0.0.0 svc/minio-service 9000:9000 -n kubeflow
+```
+
+Add secrets
+```
+echo -n "<wandb-api-key>" | base64
+
+kubectl apply -f kubeflow/secret.yaml
+```
+Add local directory as PVC
+```
+kubectl create -f kubeflow/storage.yaml
+kubectl apply -f kubeflow/pv.yaml
+#?#kubectl apply -f kubeflow/local-pvc.yaml
+
+```
+
+Add training pipline
+```
+python kubeflow/tr1.py localhost:8080
 ```
