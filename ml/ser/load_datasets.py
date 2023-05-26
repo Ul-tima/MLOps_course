@@ -1,6 +1,12 @@
+import json
 import os
 import re
+from pathlib import Path
+from typing import Any
+from typing import Dict
+from typing import Tuple
 
+import numpy as np
 import pandas as pd
 
 
@@ -72,7 +78,7 @@ def read_ravdess_data(path_dir: str) -> pd.DataFrame:
 
 def get_dataset(ravdess: bool, crema: bool, savee: bool) -> pd.DataFrame:
     dataset = pd.DataFrame({"Path": pd.Series(dtype="str"), "Emotion": pd.Series(dtype="str")})
-    par_dir = os.path.abspath(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+    par_dir = Path(__file__).resolve().parents[1]
     if ravdess:
         path = os.path.join(par_dir, "dataset", "ravdess")
         dataset = pd.concat([dataset, read_ravdess_data(path)], ignore_index=True)
@@ -83,3 +89,19 @@ def get_dataset(ravdess: bool, crema: bool, savee: bool) -> pd.DataFrame:
         path = os.path.join(par_dir, "dataset", "savee")
         dataset = pd.concat([dataset, read_savee_data(path)], ignore_index=True)
     return dataset
+
+
+def load_saved_data(data_dir: str) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    x_train = np.load(os.path.join(data_dir, "x_train_ex.npy"))
+    x_test = np.load(os.path.join(data_dir, "x_test_ex.npy"))
+    x_valid = np.load(os.path.join(data_dir, "x_valid_ex.npy"))
+    y_train = np.load(os.path.join(data_dir, "y_train.npy"))
+    y_test = np.load(os.path.join(data_dir, "y_test.npy"))
+    y_valid = np.load(os.path.join(data_dir, "y_valid.npy"))
+    return x_train, x_valid, x_test, y_train, y_valid, y_test
+
+
+def load_config(config_file: str) -> Dict[str, Any]:
+    with open(config_file, "r") as f:
+        config = json.safe_load(f)
+    return config

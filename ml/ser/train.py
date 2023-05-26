@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import List
 from typing import Tuple
 
@@ -16,7 +17,9 @@ from wandb.integration.keras import WandbMetricsLogger
 from ml.ser import audio_processing
 from ml.ser.evaluation import plot_confusion_matrix
 from ml.ser.load_datasets import get_dataset
+from ml.ser.load_datasets import load_saved_data
 from ml.ser.model import create_model
+from ml.ser.model import save_model_to_registry
 
 
 def scale_data(train: np.ndarray, valid: np.ndarray, test: np.ndarray) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -42,16 +45,8 @@ def train(use_saved_data: bool = False) -> None:
         },
     )
 
-    config = wandb.config
-
     if use_saved_data:
-        x_train = np.load("data/x_train_ex.npy")
-        x_test = np.load("data/x_test_ex.npy")
-        x_valid = np.load("data/x_valid_ex.npy")
-
-        y_train = np.load("data/y_train.npy")
-        y_test = np.load("data/y_test.npy")
-        y_valid = np.load("data/y_valid.npy")
+        x_train, x_valid, x_test, y_train, y_valid, y_test = load_saved_data("data/")
     else:
         data = get_dataset(True, True, True)
         x, y = prepare_training_data(data)
@@ -68,16 +63,10 @@ def train(use_saved_data: bool = False) -> None:
         np.save("data/y_train.npy", y_train)
         np.save("data/y_valid.npy", y_valid)
         np.save("data/y_test.npy", y_test)
+    model_path = f"data/model_{wandb.id}.h5"
+    model = train_model(wandb.config, x_train, x_valid, y_train, y_valid, model_path)
 
-    model = train_model(config, x_train, x_valid, y_train, y_valid)
-    model.save(f"data/model_{wandb.id}.h5")
-
-    model_art = wandb.Artifact(f"model_{wandb.id}", type="model")
-    model_art.add_file(f"data/model_{wandb.id}.h5")
-    wandb.log_artifact(model_art)
-
-    # Link the model to the Model Registry
-    wandb.link_artifact(model_art, "model-registry/My Registered Model")
+    save_model_to_registry(f"model_{wandb.id}", model_path)
 
     wandb.finish()
 
@@ -88,7 +77,10 @@ def train(use_saved_data: bool = False) -> None:
     wandb.finish()
 
 
-def split_data(x, y):
+def split_data(
+    x: np.ndarray, y: np.ndarray
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    # Create train, validation, and test sets
     # Create train, validation and test set
     x_train, x_test, y_train, y_test = train_test_split(
         np.array(x), np.array(y), train_size=0.8, shuffle=True, random_state=0
@@ -98,18 +90,21 @@ def split_data(x, y):
     return x_train, x_valid, x_test, y_train, y_valid, y_test
 
 
-def train_model(config, x_train, x_valid, y_train, y_valid):
+def train_model(
+    config: dict, x_train: np.ndarray, x_valid: np.ndarray, y_train: np.ndarray, y_valid: np.ndarray, model_path: Path
+) -> keras.Model:
     model = create_model(x_train.shape[1:])
-    model.compile(loss=config.loss, optimizer=config.optimizer, metrics=config.metric)
+    model.compile(loss=config["loss"], optimizer=config["optimizer"], metrics=config["metric"])
     callbacks = [keras.callbacks.EarlyStopping(patience=5), WandbMetricsLogger(), WandbCallback()]
     model.fit(
         x_train,
         y_train,
         validation_data=(x_valid, y_valid),
-        epochs=config.epochs,
-        batch_size=config.batch_size,
+        epochs=config["epochs"],
+        batch_size=config["batch_size"],
         callbacks=callbacks,
     )
+    model.save(model_path)
     return model
 
 
