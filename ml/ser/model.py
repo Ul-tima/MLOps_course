@@ -1,3 +1,6 @@
+from pathlib import Path
+
+import wandb
 from keras.layers import BatchNormalization
 from keras.layers import Conv2D
 from keras.layers import Dense
@@ -33,20 +36,15 @@ def create_model(input_shape: tuple[int, ...]) -> keras.Sequential:
     return model
 
 
-from pathlib import Path
-
-import wandb
-
-
-def save_model_to_registry(model_name: str, model_path: Path):
-    with wandb.init() as _:
+def save_model_to_registry(model_name: str, model_path: Path, project: str = "ser"):
+    with wandb.init(project=project) as _:
         model_art = wandb.Artifact(model_name, type="model")
         model_art.add_file(model_path)
         wandb.log_artifact(model_art)
-        wandb.link_artifact(model_art, "model-registry/My Registered Model")
 
 
-def load_from_registry(model_name: str, model_path: Path):
-    with wandb.init() as run:
-        artifact = run.use_artifact(model_name, type="model")
-        artifact.download(root=model_path)
+def load_from_registry(model_name: str, local_dir: str, project: str = "ser"):
+    with wandb.init(project=project) as run:
+        artifact = run.use_artifact(artifact_or_name=model_name + ":latest", type="model")
+        path = artifact.download(local_dir)
+        print(path)
