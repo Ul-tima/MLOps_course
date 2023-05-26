@@ -1,0 +1,6 @@
+ser/data/
+ser/models/
+ser/wandb/
+ser/data/**
+ser/models/**
+ser/wandb/**
