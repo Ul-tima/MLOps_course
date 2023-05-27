@@ -26,6 +26,9 @@ def scale_data(train: np.ndarray, valid: np.ndarray, test: np.ndarray) -> Tuple[
     # Get mean and standard deviation from the training set
     tr_mean = np.mean(train, axis=0)
     tr_std = np.std(train, axis=0)
+
+    np.save("data/tr_mean.npy", tr_mean)
+    np.save("data/tr_std.npy", tr_std)
     # Apply data scaling
     train = (train - tr_mean) / tr_std
     valid = (valid - tr_mean) / tr_std
@@ -72,7 +75,8 @@ def train(use_saved_data: bool = False) -> None:
 
     y_predict = model.predict(x_test)
     matrix = confusion_matrix(y_test.argmax(axis=1), y_predict.argmax(axis=1))
-    plot_confusion_matrix(matrix, "data/confusion_matrix_test.png")
+    target = np.load("data/classes.npy")
+    plot_confusion_matrix(matrix, target, "data/confusion_matrix_test.png")
 
     wandb.finish()
 
