@@ -12,6 +12,7 @@ jobs:
   validate:
     name: Test ml
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - name: Checkout
         uses: actions/checkout@v3
