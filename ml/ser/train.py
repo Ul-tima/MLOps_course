@@ -66,10 +66,10 @@ def train(use_saved_data: bool = False) -> None:
         np.save("data/y_train.npy", y_train)
         np.save("data/y_valid.npy", y_valid)
         np.save("data/y_test.npy", y_test)
-    model_path = f"data/model_{wandb.id}.h5"
+    model_path = f"data/model_{wandb.run.id}.h5"
     model = train_model(wandb.config, x_train, x_valid, y_train, y_valid, model_path)
 
-    save_model_to_registry(f"model_{wandb.id}", model_path)
+    save_model_to_registry(f"cnn", model_path)
 
     wandb.finish()
 
