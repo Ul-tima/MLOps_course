@@ -142,3 +142,11 @@ Run hyperparameter tuning
 wandb sweep ml/sweep.yaml
 
 wandb agent SWEEP_ID
+
+
+
+
+**Streamlit**
+```
+PYTHONPATH=`pwd` streamlit run app/streamlit_ui.py
+```
