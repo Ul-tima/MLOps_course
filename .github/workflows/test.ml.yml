@@ -29,11 +29,11 @@ jobs:
 
       - name: Run model pytest
         run: |
-          coverage python -m pytest ml/tests/model
+          coverage run  --source=ml -m pytest ml/tests/model
 
       - name: Run pytest
         run: |
-          coverage run -m pytest ml/tests/code
+          coverage run --source=ml -m pytest ml/tests/code
 
       - name: Install `coverage2clover` Python Package
         shell: bash
