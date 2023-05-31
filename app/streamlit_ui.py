@@ -124,7 +124,7 @@ def main():
         with col1:
             st.markdown("## Predictions")
             predictor = get_model()
-            pred = predictor.predict(path)[0]
+            pred = predictor.predict(path)
             txt = "Emotions\n" + get_title(pred, CAT7)
             fig3 = plt.figure(figsize=(3, 3))
             plot_colored_polar(fig3, predictions=pred, categories=CAT7, title=txt, colors=COLOR_DICT)

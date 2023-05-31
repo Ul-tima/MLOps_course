@@ -150,3 +150,11 @@ wandb agent SWEEP_ID
 ```
 PYTHONPATH=`pwd` streamlit run app/streamlit_ui.py
 ```
+
+
+**FastAPI**
+```
+docker build . --file=web/Dockerfile -t=web:v1
+docker build --no-cache . --file=web/Dockerfile -t=web:v1
+docker run web:v1 uvicorn main:app--host 0.0.0.0 --port 90
+```
