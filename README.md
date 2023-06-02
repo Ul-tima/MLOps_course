@@ -156,5 +156,11 @@ PYTHONPATH=`pwd` streamlit run app/streamlit_ui.py
 ```
 docker build . --file=web/Dockerfile -t=web:v1
 docker build --no-cache . --file=web/Dockerfile -t=web:v1
-docker run web:v1 uvicorn main:app--host 0.0.0.0 --port 90
+docker tag web:v1 jpikovets/web:v1
+
+docker push jpikovets/web:v1
+
+kind create cluster --name fast
+kubectl create -f kub/app-fastapi.yaml
+kubectl apply -f kub/app-fastapi.yaml
 ```
