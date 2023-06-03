@@ -148,7 +148,18 @@ wandb agent SWEEP_ID
 
 **Streamlit**
 ```
-PYTHONPATH=`pwd` streamlit run app/streamlit_ui.py
+PYTHONPATH=`pwd` streamlit run app/streamlit/streamlit_ui.py
+
+docker build . --file=app/streamlit/Dockerfile -t=streamlit:v1
+docker tag streamlit:v1 jpikovets/streamlit:latest
+
+docker push jpikovets/streamlit:latest
+
+kind create cluster --name fast
+kubectl create -f kub/app-streamlit.yaml
+kubectl apply -f kub/app-streamlit.yaml
+
+kubectl port-forward --address 0.0.0.0 svc/app-streamlit 8080:8080
 ```
 
 
