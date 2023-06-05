@@ -144,7 +144,11 @@ wandb sweep ml/sweep.yaml
 wandb agent SWEEP_ID
 
 
-
+**K8s secrets**
+```
+export WANDB_API_KEY=****
+kubectl create secret generic wandb --from-literal=WANDB_API_KEY=$WANDB_API_KEY
+```
 
 **Streamlit**
 ```
