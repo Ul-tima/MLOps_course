@@ -12,6 +12,7 @@ jobs:
   validate:
     name: Test ml
     runs-on: ubuntu-latest
+    permissions: write-all
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -24,12 +25,34 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          pip install coverage
           pip install -r ml/requirements.txt
 
       - name: Run model pytest
         run: |
-          python -m pytest ml/tests/model
+          WANDB_API_KEY=${{ secrets.WANDB_API_KEY }} coverage run  --source=ml -m pytest ml/tests/model
 
       - name: Run pytest
         run: |
-          python -m pytest ml/tests/code
+          coverage run -a --source=ml -m pytest ml/tests/code
+
+      - name: Install `coverage2clover` Python Package
+        shell: bash
+        run: pip install coverage2clover==4.0.0
+      -
+        name: Report Coverage
+        shell: bash
+        run: |
+          coverage report -m
+          coverage xml
+          coverage2clover -i coverage.xml -o clover.xml
+      -
+        name: Validate and Comment Coverage
+        uses: slavcodev/coverage-monitor-action@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          coverage_path: clover.xml
+          threshold_alert: 30
+          threshold_warning: 35
+          status_context: ${{ github.workflow }} / Verify Unit Tests Coverage
+          comment_context: ${{ github.workflow }} / Unit Tests Coverage
