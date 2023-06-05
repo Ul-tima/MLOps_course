@@ -27,4 +27,4 @@ jobs:
 
       - name: Run pytest
         run: |
-          pytest web/tests
+          PYTHONPATH=web/emotions_recognition_api pytest web/tests
