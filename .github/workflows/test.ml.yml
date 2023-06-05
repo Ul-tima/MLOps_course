@@ -34,7 +34,7 @@ jobs:
 
       - name: Run pytest
         run: |
-          coverage run --source=ml -m pytest ml/tests/code
+          coverage run -a --source=ml -m pytest ml/tests/code
 
       - name: Install `coverage2clover` Python Package
         shell: bash
