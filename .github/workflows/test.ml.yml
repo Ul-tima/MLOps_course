@@ -52,7 +52,7 @@ jobs:
         with:
           github_token: ${{ secrets.github_token }}
           coverage_path: clover.xml
-          threshold_alert: 20
+          threshold_alert: 30
           threshold_warning: 35
           status_context: ${{ github.workflow }} / Verify Unit Tests Coverage
           comment_context: ${{ github.workflow }} / Unit Tests Coverage
