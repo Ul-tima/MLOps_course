@@ -18,7 +18,10 @@ spec:
         image: jpikovets/web:v1
         env:
           - name: WANDB_API_KEY
-            value: "76ee0b1e70d35929fae7f66d69ab36d07abec22a"
+            valueFrom:
+              secretKeyRef:
+                name: wandb
+                key: WANDB_API_KEY
 ---
 apiVersion: v1
 kind: Service
