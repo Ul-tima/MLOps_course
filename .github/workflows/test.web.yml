@@ -28,4 +28,4 @@ jobs:
 
       - name: Run pytest
         run: |
-          PYTHONPATH=web/emotions_recognition_api:. pytest web/tests
+           WANDB_API_KEY=${{ secrets.WANDB_API_KEY }} PYTHONPATH=web/emotions_recognition_api:. pytest web/tests
