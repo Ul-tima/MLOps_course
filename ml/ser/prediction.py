@@ -31,7 +31,7 @@ def scale_feature(feature: np.ndarray) -> np.ndarray:
     return feature
 
 
-def feture_extraction(file_path, scale):
+def feature_extraction(file_path, scale):
     features = []
     audio, s_r = librosa.load(file_path, sr=16000)
     # without augmentation
@@ -51,7 +51,7 @@ class Predictor:
         self.model = load_model(local_path)
 
     def predict(self, file_path, scale=True) -> dict[str, float]:
-        features = feture_extraction(file_path, scale)
+        features = feature_extraction(file_path, scale)
         y_predict = self.model.predict(features)
         result = dict(zip(get_emotions(), y_predict[0].T))
         return result
