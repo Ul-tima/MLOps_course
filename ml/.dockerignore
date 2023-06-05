@@ -6,3 +6,4 @@
 !ser/data/tr_mean.npy
 !ser/data/tr_std.npy
 !ser/data/classes.npy
+!requirements.txt
