@@ -150,6 +150,19 @@ export WANDB_API_KEY=****
 kubectl create secret generic wandb --from-literal=WANDB_API_KEY=$WANDB_API_KEY
 ```
 
+
+**FastAPI**
+```
+docker build . --file=web/Dockerfile -t=web:v1
+docker build --no-cache . --file=web/Dockerfile -t=web:v1
+docker tag web:v1 jpikovets/web:v1
+
+docker push jpikovets/web:v1
+
+kind create cluster --name fast
+kubectl create -f kub/app-fastapi.yaml
+kubectl apply -f kub/app-fastapi.yaml
+
 **Streamlit**
 ```
 PYTHONPATH=`pwd` streamlit run app/streamlit/streamlit_ui.py

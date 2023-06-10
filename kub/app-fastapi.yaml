@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-fastapi
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: app-fastapi
+  template:
+    metadata:
+      labels:
+        app: app-fastapi
+    spec:
+      containers:
+      - name: web
+        image: jpikovets/web:v1
+        env:
+          - name: WANDB_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: wandb
+                key: WANDB_API_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-fastapi
+  namespace: default
+spec:
+  selector:
+    app: app-fastapi
+  ports:
+    - port: 80
+      protocol: TCP
