@@ -143,6 +143,14 @@ wandb sweep ml/sweep.yaml
 
 wandb agent SWEEP_ID
 
+
+**K8s secrets**
+```
+export WANDB_API_KEY=****
+kubectl create secret generic wandb --from-literal=WANDB_API_KEY=$WANDB_API_KEY
+```
+
+
 **FastAPI**
 ```
 docker build . --file=web/Dockerfile -t=web:v1
@@ -154,4 +162,19 @@ docker push jpikovets/web:v1
 kind create cluster --name fast
 kubectl create -f kub/app-fastapi.yaml
 kubectl apply -f kub/app-fastapi.yaml
+
+**Streamlit**
+```
+PYTHONPATH=`pwd` streamlit run app/streamlit/streamlit_ui.py
+
+docker build . --file=app/streamlit/Dockerfile -t=streamlit:v1
+docker tag streamlit:v1 jpikovets/streamlit:latest
+
+docker push jpikovets/streamlit:latest
+
+kind create cluster --name fast
+kubectl create -f kub/app-streamlit.yaml
+kubectl apply -f kub/app-streamlit.yaml
+
+kubectl port-forward --address 0.0.0.0 svc/app-streamlit 8080:8080
 ```
